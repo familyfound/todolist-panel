@@ -6,7 +6,6 @@
   "keywords": [],
   "dependencies": {
     "familyfound/promise": "*",
-    "familyfound/todo": "*",
     "jabapyth/angularjs": "*",
     "visionmedia/superagent": "*",
     "familyfound/ffapi": "*",

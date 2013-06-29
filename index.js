@@ -4,7 +4,6 @@ var angular = require('angularjs')
   , promise = require('promise')
   // angular directives
   , fan = require('fan')
-  , todo = require('todo')
   , newTodo = require('new-todo')
   , todoList = require('todo-list')
   // angular factories
@@ -17,8 +16,6 @@ var angular = require('angularjs')
   , defaultSettings = require('./settings')
   , template = require('./template');
 
-angularSettings.factory('settings', settings.getSettings());
-
 settings.sub('panel').add(defaultSettings);
 
 angularSettings.config('familyfound', {
@@ -26,8 +23,6 @@ angularSettings.config('familyfound', {
   sub: 'panel',
   pages: ['display']
 });
-
-angularSettings.loadLocalStorage(settings);
 
 settings.set('ffapi:main.ffhome', 'https://familyfound.herokuapp.com/');
 
@@ -94,7 +89,7 @@ var loadPeople = function (get, base, scope, gens) {
 };
 
 var app = angular.module('familyfound',
-                         ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi', 'settings'])
+                         ['new-todo', 'todo-list', 'fan', 'ffapi', 'settings'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
