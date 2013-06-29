@@ -7,8 +7,9 @@ module.exports = {
       name: 'insertBefore',
       title: 'Insert Before',
       value: 'LifeSketchVitalSection',
+      type: 'radio',
       options: [
-        ['Vital Infirmation', 'LifeSketchVitalSection'],
+        ['Vital Information', 'LifeSketchVitalSection'],
         ['Other Information', 'LifeSketchNonVitalSection'],
         ['Family Members', 'FamilyMembersSection'],
         ['Sources', 'SourcesSection'],

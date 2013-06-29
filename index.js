@@ -43,7 +43,7 @@ function inject(personId) {
   }
   var div = tpldiv(template)
     , parentDiv = document.querySelector('#ancestorPage .details-content')
-    , insertBefore = settings.get('familyfound:display.insertBefore');
+    , insertBefore = settings.get('panel:display.insertBefore');
   div.querySelector('#FamilyFound').setAttribute('data-person-id', personId);
   if (insertBefore === 'last') {
     bootstrap.last(div, parentDiv, 'familyfound');
@@ -94,7 +94,7 @@ var loadPeople = function (get, base, scope, gens) {
 };
 
 var app = angular.module('familyfound',
-                         ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi'])
+                         ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi', 'settings'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
@@ -158,5 +158,6 @@ module.exports = {
     window.addEventListener('hashchange', hashChange);
     hashChange();
   },
-  inject: inject
+  inject: inject,
+  app: app
 };
