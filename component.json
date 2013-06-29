@@ -1,7 +1,7 @@
 {
-  "name": "chrome-ext",
-  "repo": "familyfound/chrome-ext",
-  "description": "The Chrome extension for FamilyFound",
+  "name": "todolist-panel",
+  "repo": "familyfound/todolist-panel",
+  "description": "The todolist panel injected into FamilySearch.org",
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
@@ -27,6 +27,6 @@
     "template.js"
   ],
   "styles": [
-    "chrome-ext.css"
+    "todolist-panel.css"
   ]
 }

@@ -1,7 +1,7 @@
 
-# chrome-ext
+# todolist panel
 
-  The Chrome extension for FamilyFound
+  The Todolist panel injected into Familysearch.org
 
 ## Screenshot
 
@@ -20,13 +20,6 @@ or run `make build` and then open `test/example.html` in a browser.
 ## Building
 
     $ make
-
-The `/ext` folder is ready to be loaded by chrome as an unpacked extension.
-Zip it up, and you can upload it to the chrome web store.
-
-## Built extension files
-
-See the `build` branch for binaries.
 
 ## License
 

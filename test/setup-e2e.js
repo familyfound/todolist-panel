@@ -1,6 +1,6 @@
 
 var angular = require('angularjs')
-  , chromeExt = require('chrome-ext')
+  , todoPanel = require('todolist-panel')
   , copy = require('deep-copy')
 
   , log = require('domlog');

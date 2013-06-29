@@ -2,14 +2,9 @@
 default: build
 	@:
 
-zip: build
-	@rm -rf ext.zip
-	@zip -r ext.zip ext
-
-build: index.js chrome-ext.css template.js
+build: index.js todolist-panel.css template.js
 	@echo "Component"
 	@component build --dev
-	cp build/build.js ext/src/inject/inject.js && cp build/build.css ext/src/inject/inject.css
 
 template.html: template.jade
 	@jade -P $<
@@ -32,7 +27,7 @@ ifeq ($(UNAME_S),Darwin)
 		open := open
 endif
 
-example:
+example: build
 	@${open} test/example.html
 
 .PHONY: clean example
