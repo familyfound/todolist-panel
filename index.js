@@ -2,15 +2,34 @@
 var angular = require('angularjs')
   , request = require('superagent')
   , promise = require('promise')
+  // angular directives
+  , fan = require('fan')
   , todo = require('todo')
   , newTodo = require('new-todo')
   , todoList = require('todo-list')
-  , fan = require('fan')
+  // angular factories
   , ffapi = require('ffapi')
   , bootstrap = require('ng-bootstrap')
+  // settings
   , settings = require('settings')
+  , angularSettings = require('angular-settings')
 
+  , defaultSettings = require('./settings')
   , template = require('./template');
+
+angularSettings.factory('settings', settings.getSettings());
+
+settings.sub('panel').add(defaultSettings);
+
+angularSettings.config('familyfound', {
+  name: 'default',
+  sub: 'panel',
+  pages: ['display']
+});
+
+angularSettings.loadLocalStorage(settings);
+
+settings.set('ffapi:main.ffhome', 'https://familyfound.herokuapp.com/');
 
 function tpldiv(template) {
   var div = document.createElement('div');
@@ -24,8 +43,14 @@ function inject(personId) {
   }
   var div = tpldiv(template)
     , parentDiv = document.querySelector('#ancestorPage .details-content')
+    , insertBefore = settings.get('familyfound:display.insertBefore');
   div.querySelector('#FamilyFound').setAttribute('data-person-id', personId);
-  bootstrap(div, parentDiv, 'familyfound', parentDiv.querySelector('#LifeSketchVitalSection'));
+  if (insertBefore === 'last') {
+    bootstrap.last(div, parentDiv, 'familyfound');
+  } else {
+    bootstrap(div, parentDiv, 'familyfound',
+              parentDiv.querySelector('#' + insertBefore));
+  }
 }
 
 function parseArgs(args) {
@@ -43,8 +68,6 @@ function hashChange() {
     }, 100);
   }
 }
-
-settings.set('ffapi:main.ffhome', 'https://familyfound.herokuapp.com/');
 
 var loadPeople = function (get, base, scope, gens) {
   if (gens <= 0) {
@@ -70,7 +93,8 @@ var loadPeople = function (get, base, scope, gens) {
   }
 };
 
-angular.module('familyfound', ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi'])
+var app = angular.module('familyfound',
+                         ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
@@ -125,6 +149,9 @@ angular.module('familyfound', ['todo', 'new-todo', 'todo-list', 'fan', 'ffapi'])
       if (!cached) $scope.$digest();
     });
   });
+
+app.controller('Settings', function Settings() {
+});
 
 module.exports = {
   attach: function (window) {
