@@ -6,8 +6,9 @@ module.exports = {
     {
       name: 'insertBefore',
       title: 'Insert Before',
+      description: 'Where on the person page should the panel be inserted?',
       value: 'LifeSketchVitalSection',
-      type: 'radio',
+      type: 'select',
       options: [
         ['Vital Information', 'LifeSketchVitalSection'],
         ['Other Information', 'LifeSketchNonVitalSection'],
@@ -15,7 +16,7 @@ module.exports = {
         ['Sources', 'SourcesSection'],
         ['Discussions', 'DiscussionsSection'],
         ['Temple Ordinances', 'TempleOrdinancesSection'],
-        ['Last', 'last']
+        ['<Last>', 'last']
       ]
     }
   ]
