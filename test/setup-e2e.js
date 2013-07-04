@@ -26,7 +26,7 @@ function randGend() {
 }
 
 function randStatus() {
-  return ['working', 'clean', 'complete'][parseInt(Math.random()*3)];
+  return ['inactive', 'active', 'clean', 'complete'][parseInt(Math.random()*3)];
 }
 
 function newFamily(gen, family) {
@@ -105,7 +105,7 @@ angular.module('test', ['todolist-panel'])
       setTimeout(function() {
         return next({
           id: personId,
-          status: 'working',
+          status: randStatus(),
           todos: [{
             _id: '12434jJLKFSDf',
             completed: false,

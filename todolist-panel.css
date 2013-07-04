@@ -56,19 +56,6 @@
   margin-right: 10px;
 }
 
-#FamilyFoundSection .status .status-indicator {
-  background-color: #eee;
-}
-
-#FamilyFoundSection .status .status-indicator.clean {
-  background-color: rgb(150, 230, 255);
-}
-
-#FamilyFoundSection .status .status-indicator.complete {
-  background-color: rgb(115, 255, 176);
-}
-
-
 #FamilyFoundSection .status label input {
   margin-top: -4px;
 }

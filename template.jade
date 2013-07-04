@@ -6,10 +6,13 @@
     #FamilyFound.gadget.familyFound(ng-controller='FamilyFoundCtrl')
       .left-side
         .status.btn-group(data-toggle="buttons-radio")
-          .status-indicator(ng-class='status')
+          .status-indicator(class='person {{rootPerson.status}}')
           label
-            input(type="radio", value="working", ng-model="rootPerson.status")
-            span Working
+            input(type="radio", value="inactive", ng-model="rootPerson.status")
+            span Inactive
+          label
+            input(type="radio", value="active", ng-model="rootPerson.status")
+            span Active
           label
             input(type="radio", value="clean", ng-model="rootPerson.status")
             span Clean

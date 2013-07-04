@@ -7,7 +7,7 @@ build: index.js todolist-panel.css template.js
 	@component build --dev
 
 template.html: template.jade
-	@jade -P $<
+	@jade $<
 
 template.js: template.html
 	@component convert $<
