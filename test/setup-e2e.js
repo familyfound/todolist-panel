@@ -3,9 +3,9 @@ var angular = require('angularjs')
   , todoPanel = require('todolist-panel')
   , copy = require('deep-copy')
 
-  , log = function (){}; //require('domlog');
+  , log = require('domlog');
 
-// log.init();
+log.init();
 
 function rc(){
   var chars = 'WERTYUIOPASDFGHJKLZXCVBNM';
@@ -125,18 +125,31 @@ angular.module('test', ['todolist-panel'])
     };
   })
   .factory('ffapi', function () {
+    var cache = {};
     var ffapi = function (name, params, next) {
-      log('call made', name, params, next);
+      log('call made', name, params, next)
+      if (cache[params.id]) {
+        log(cache[params.id].display.name, cache[params.id].status);
+      }
       if (name == 'todos/add') {
         setTimeout(function () {
           next({id: '234tre'});
         }, 0);
       }
+      if (name == 'person/status') {
+        if (cache[params.id]) {
+          cache[params.id].status = params.status;
+        }
+      }
     };
     ffapi.relation = function (personId, next) {
-      // console.log('getting ancestor', personId); //
+      // log('getting ancestor', personId); //
+      if (cache[personId]) {
+        return next(cache[personId], true);
+      }
       setTimeout(function () {
         var base = newPerson(personId[0] === 'M' ? 'male' : 'female');
+        cache[personId] = base;
         return next(base);
       }, 100 + Math.random() * 300);
     };

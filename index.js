@@ -77,7 +77,11 @@ var loadPeople = function (get, base, scope, gens) {
   }
   Object.keys(base.familyIds).forEach(function (spouseId) {
     if (!base.families[spouseId]) base.families[spouseId] = [null];
-    for (var i=0; i<base.familyIds[spouseId].length; i++) {
+    get(spouseId, function (data, cached) {
+      base.families[spouseId][0] = data;
+      if (!cached) scope.$digest();
+    });
+    for (var i=1; i<base.familyIds[spouseId].length; i++) {
       base.families[spouseId].push(null);
       get(base.familyIds[spouseId][i], function (i, data, cached) {
         base.families[spouseId][i] = data;
@@ -89,7 +93,7 @@ var loadPeople = function (get, base, scope, gens) {
 
 var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffapi'])
 
-  .controller('FamilyFoundCtrl', function ($scope, $attrs, ffperson, ffapi) {
+  .controller('FamilyFoundCtrl', function ($scope, $attrs, $element, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
     window.addEventListener('hashchange', function () {
       var params = parseArgs(location.hash.slice(1));
@@ -109,13 +113,11 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
         $scope.$digest();
       }
     });
-    $scope.status = null;
     ffperson($attrs.personId, function (person) {
       $scope.todos = person.todos;
-      $scope.status = person.status;
       $scope.$digest();
     });
-    $scope.$watch('status', function (value, old) {
+    $scope.$watch('rootPerson.status', function (value, old) {
       if (value === old || !old) return;
       ffapi('person/status', {status: value, id: $scope.personId});
     });
@@ -128,6 +130,9 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
       ringWidth: 20,
       doubleWidth: false,
       tips: true,
+      heightChange: function (height) {
+        $element.css('min-height', height + 'px');
+      },
       onNode: function (el, person) {
         el.on('click', function () {
           window.location.hash = '#view=ancestor&person=' + person.id;
