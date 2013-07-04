@@ -13,8 +13,7 @@
     "notablemind/settings": "*",
     "familyfound/new-todo": "*",
     "familyfound/todo-list": "*",
-    "familyfound/fan": "*",
-    "notablemind/angular-settings": "*"
+    "familyfound/fan": "*"
   },
   "development": {
     "familyfound/domlog": "*",

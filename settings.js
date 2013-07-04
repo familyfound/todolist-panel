@@ -1,10 +1,8 @@
 
 module.exports = {
-  name: 'display',
-  title: 'Display',
-  settings: [
-    {
-      name: 'insertBefore',
+  display: {
+    _group: true,
+    insertBefore: {
       title: 'Insert Before',
       description: 'Where on the person page should the panel be inserted?',
       value: 'LifeSketchVitalSection',
@@ -19,6 +17,6 @@ module.exports = {
         ['<Last>', 'last']
       ]
     }
-  ]
+  }
 };
 

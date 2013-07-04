@@ -10,21 +10,12 @@ var angular = require('angularjs')
   , ffapi = require('ffapi')
   , bootstrap = require('ng-bootstrap')
   // settings
-  , settings = require('settings')
-  , angularSettings = require('angular-settings')
+  , settings = require('settings')('panel')
 
   , defaultSettings = require('./settings')
   , template = require('./template');
 
-settings.sub('panel').add(defaultSettings);
-
-angularSettings.config('familyfound', {
-  name: 'default',
-  sub: 'panel',
-  pages: ['display']
-});
-
-settings.set('ffapi:main.ffhome', 'https://familyfound.herokuapp.com/');
+settings.config(defaultSettings);
 
 function tpldiv(template) {
   var div = document.createElement('div');
@@ -38,12 +29,12 @@ function inject(personId) {
   }
   var div = tpldiv(template)
     , parentDiv = document.querySelector('#ancestorPage .details-content')
-    , insertBefore = settings.get('panel:display.insertBefore');
+    , insertBefore = settings.get('display.insertBefore');
   div.querySelector('#FamilyFound').setAttribute('data-person-id', personId);
   if (insertBefore === 'last') {
-    bootstrap.last(div, parentDiv, 'familyfound');
+    bootstrap.last(div, parentDiv, 'todolist-panel');
   } else {
-    bootstrap(div, parentDiv, 'familyfound',
+    bootstrap(div, parentDiv, 'todolist-panel',
               parentDiv.querySelector('#' + insertBefore));
   }
 }
@@ -73,7 +64,6 @@ var loadPeople = function (get, base, scope, gens) {
   if (base.fatherId) {
     get(base.fatherId, function (data, cached) {
         base.father = data;
-        data.mainChild = base;
         loadPeople(get, base.father, scope, gens - 1);
         if (!cached) scope.$digest();
       });
@@ -81,15 +71,23 @@ var loadPeople = function (get, base, scope, gens) {
   if (base.motherId) {
     get(base.motherId, function (data, cached) {
         base.mother = data;
-        data.mainChild = base;
         loadPeople(get, base.mother, scope, gens - 1);
         if (!cached) scope.$digest();
       });
   }
+  Object.keys(base.familyIds).forEach(function (spouseId) {
+    if (!base.families[spouseId]) base.families[spouseId] = [null];
+    for (var i=0; i<base.familyIds[spouseId].length; i++) {
+      base.families[spouseId].push(null);
+      get(base.familyIds[spouseId][i], function (i, data, cached) {
+        base.families[spouseId][i] = data;
+        if (!cached) scope.$digest();
+      }.bind(null, i));
+    }
+  });
 };
 
-var app = angular.module('familyfound',
-                         ['new-todo', 'todo-list', 'fan', 'ffapi', 'settings'])
+var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffapi'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
@@ -130,7 +128,6 @@ var app = angular.module('familyfound',
       ringWidth: 20,
       doubleWidth: false,
       tips: true,
-      removeRoot: true,
       onNode: function (el, person) {
         el.on('click', function () {
           window.location.hash = '#view=ancestor&person=' + person.id;
@@ -144,9 +141,6 @@ var app = angular.module('familyfound',
       if (!cached) $scope.$digest();
     });
   });
-
-app.controller('Settings', function Settings() {
-});
 
 module.exports = {
   attach: function (window) {
