@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Component Test</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="https://familysearch.org/tree/styles/engage/css/engage_style.css">
+    <link rel="stylesheet" href="../build/build.css">
+    <style>
+      body { font-family: sans-serif; }
+      table {
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid #ccc;
+      }
+      th, td {
+        padding: 5px 10px;
+      }
+      .docs {
+        margin-bottom: 30px;
+      }
+      .example {
+        float: left;
+        margin-right: 30px;
+      }
+    </style>
+  </head>
+  <body id="tree-style">
+    <div class="container" id="content">
+    <script src="../build/build.js"></script>
+    <script src="setup-e2e.js"></script>
+    <div class="docs">
+      <h1>FamilyFound Todolist Panel Example</h1>
+    </div>
+    <hr/>
+    <div id="ang">
+    </div>
+    </div>
+    <script>
+      function tpldiv(template) {
+        var div = document.createElement('div');
+        div.innerHTML = template;
+        return div.firstElementChild;
+      }
+      var bootstrap = require('ng-bootstrap')
+        , template = require('todolist-panel/template')
+        , div = tpldiv(template);
+
+      div.querySelector('#FamilyFound').setAttribute('data-person-id', 'MKWZ-23E');
+
+      bootstrap.append(div, '#ang', 'test');
+    </script>
+  </body>
+</html>
