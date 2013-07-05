@@ -2,8 +2,11 @@
 var angular = require('angularjs')
   , request = require('superagent')
   , promise = require('promise')
+  , query = require('query')
+  , Select = require('select-popover')
   // angular directives
   , fan = require('fan')
+  , tip = require('tip')
   , newTodo = require('new-todo')
   , todoList = require('todo-list')
   // angular factories
@@ -91,10 +94,46 @@ var loadPeople = function (get, base, scope, gens) {
   });
 };
 
+function titlefy(text) {
+  return text[0].toUpperCase() + text.slice(1);
+}
+
+var statuses = ['inactive', 'active', 'clean', 'complete'];
+var statusOptions = [];
+for (var i=0; i<statuses.length; i++) {
+  statusOptions.push({
+    value: statuses[i],
+    html: '<span class="person circle ' + statuses[i] + '"></span>' + titlefy(statuses[i])
+  });
+}
+
+var helpText = "<b>Inactive:</b> Research has not yet begun.<br>" +
+  "<b>Active:</b> Research is in progress.<br>" +
+  "<b>Clean:</b> Duplicates have been resolved and existing data has been checked for reasonableness.<br>" +
+  "<b>Complete:</b> All data is found, sources have been attached, etc.";
+
 var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffapi'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, $element, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
+    var helpTip = new tip(helpText);
+    helpTip.attach(query('span.status-help', $element[0]));
+    helpTip.position('west');
+    helpTip.classname = 'help-tip';
+    var select = new Select(statusOptions, query('.select-status', $element[0]));
+    select.on('select', function (value) {
+      if ($scope.rootPerson) {
+        $scope.rootPerson.status = value;
+        $scope.$digest();
+      }
+    });
+    select.addClass('status-popover');
+    $scope.$watch('rootPerson.status', function (value, old) {
+      console.log('heelo', value, old);
+      select.select(value, true);
+      if (value === old || !old) return;
+      ffapi('person/status', {status: value, id: $scope.personId});
+    });
     window.addEventListener('hashchange', function () {
       var params = parseArgs(location.hash.slice(1));
       if (params.person !== $scope.personId) {
@@ -116,10 +155,6 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
     ffperson($attrs.personId, function (person) {
       $scope.todos = person.todos;
       $scope.$digest();
-    });
-    $scope.$watch('rootPerson.status', function (value, old) {
-      if (value === old || !old) return;
-      ffapi('person/status', {status: value, id: $scope.personId});
     });
     $scope.fanConfig = {
       gens: 6,

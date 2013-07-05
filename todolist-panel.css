@@ -1,4 +1,69 @@
 
+.help-tip .tip-inner {
+  text-align: left;
+  font-size: 14px;
+  background-color: white;
+  color: #333;
+  border: 2px solid black;
+}
+
+.help-tip .tip-arrow,
+.status-popover .tip-arrow {
+  display: none;
+}
+
+.status-popover .tip-inner {
+  margin-top: -5px;
+  border-color: #ccc;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.status-popover .item:hover {
+  background-color: #ddd;
+}
+
+.status-popover .item {
+  text-align: left;
+}
+
+.status-popover .circle,
+#FamilyFound .select-status .circle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-bottom: -3px;
+}
+
+#FamilyFoundSection h4.gadget-title {
+  margin-bottom: 10px;
+}
+
+#FamilyFound .select-status {
+  display: inline-block;
+  height: 25px;
+  cursor: pointer;
+  padding: 5px 8px 0 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+#FamilyFound .select-status::after {
+  content: "\25BC";
+  font-size: 8px;
+  left: 0px;
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  margin-left: 6px;
+}
+
+#FamilyFound .select-status:hover {
+  background-color: #ddd;
+}
+
 #FamilyFoundSection #FamilyFound {
   position: relative;
   min-height: 190px;
@@ -6,6 +71,10 @@
 
 #FamilyFoundSection .left-side {
   width: 550px;
+}
+
+#FamilyFoundSection .new-todo {
+  margin-top: 5px;
 }
 
 #FamilyFoundSection .left-side input.new-todo {

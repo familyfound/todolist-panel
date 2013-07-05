@@ -26,7 +26,7 @@ function randGend() {
 }
 
 function randStatus() {
-  return ['inactive', 'active', 'clean', 'complete'][parseInt(Math.random()*3)];
+  return ['inactive', 'active', 'clean', 'complete'][parseInt(Math.random()*4)];
 }
 
 function newFamily(gen, family) {

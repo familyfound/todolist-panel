@@ -2,23 +2,12 @@
   .section-wrap
     h4.gadget-title FamilyFound
     .open-close-control
-      a.open-close-button(href='https://familyfound.herokuapp.com', target='_blank') View Dashboard
+      a(href='https://familyfound.herokuapp.com', target='_blank') View Dashboard
     #FamilyFound.gadget.familyFound(ng-controller='FamilyFoundCtrl')
       .left-side
-        .status.btn-group(data-toggle="buttons-radio")
-          .status-indicator(class='person {{rootPerson.status}}')
-          label
-            input(type="radio", value="inactive", ng-model="rootPerson.status")
-            span Inactive
-          label
-            input(type="radio", value="active", ng-model="rootPerson.status")
-            span Active
-          label
-            input(type="radio", value="clean", ng-model="rootPerson.status")
-            span Clean
-          label
-            input(type="radio", value="complete", ng-model="rootPerson.status")
-            span Complete
+        .status(data-toggle="buttons-radio")
+          .select-status
+          span.status-help.icon-question-sign
         div(data-new-todo="todos", data-person-id='personId')
         div(data-todo-list="todos")
       .fan-chart

@@ -11,9 +11,12 @@
     "familyfound/ffapi": "*",
     "familyfound/ng-bootstrap": "*",
     "notablemind/settings": "*",
+    "component/tip": "*",
     "familyfound/new-todo": "*",
     "familyfound/todo-list": "*",
-    "familyfound/fan": "*"
+    "familyfound/fan": "*",
+    "familyfound/select-popover": "*",
+    "component/query": "*"
   },
   "development": {
     "familyfound/domlog": "*",
