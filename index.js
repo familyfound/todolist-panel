@@ -58,7 +58,7 @@ function hashChange() {
   }
 }
 
-var loadPeople = function (get, base, scope, gens) {
+var loadPeople = function (get, base, scope, gens, root) {
   if (gens <= 0) {
     base.hideParents = true;
     return null;
@@ -78,20 +78,22 @@ var loadPeople = function (get, base, scope, gens) {
         if (!cached) scope.$digest();
       });
   }
-  Object.keys(base.familyIds).forEach(function (spouseId) {
-    if (!base.families[spouseId]) base.families[spouseId] = [null];
-    get(spouseId, function (data, cached) {
-      base.families[spouseId][0] = data;
-      if (!cached) scope.$digest();
-    });
-    for (var i=1; i<base.familyIds[spouseId].length; i++) {
-      base.families[spouseId].push(null);
-      get(base.familyIds[spouseId][i], function (i, data, cached) {
-        base.families[spouseId][i] = data;
+  if (root) {
+    Object.keys(base.familyIds).forEach(function (spouseId) {
+      if (!base.families[spouseId]) base.families[spouseId] = [null];
+      get(spouseId, function (data, cached) {
+        base.families[spouseId][0] = data;
         if (!cached) scope.$digest();
-      }.bind(null, i));
-    }
-  });
+      });
+      for (var i=1; i<base.familyIds[spouseId].length; i++) {
+        base.families[spouseId].push(null);
+        get(base.familyIds[spouseId][i], function (i, data, cached) {
+          base.families[spouseId][i] = data;
+          if (!cached) scope.$digest();
+        }.bind(null, i));
+      }
+    });
+  }
 };
 
 function titlefy(text) {
@@ -146,7 +148,7 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
         $scope.rootPerson = false;
         ffapi.relation($scope.personId, function (person, cached) {
           $scope.rootPerson = person;
-          loadPeople(ffapi.relation, person, $scope, 5);
+          loadPeople(ffapi.relation, person, $scope, 5, true);
           if (!cached) $scope.$digest();
         });
         $scope.$digest();
@@ -177,7 +179,7 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
     $scope.rootPerson = false;
     ffapi.relation($attrs.personId, function (person, cached) {
       $scope.rootPerson = person;
-      loadPeople(ffapi.relation, person, $scope, 5);
+      loadPeople(ffapi.relation, person, $scope, 5, true);
       if (!cached) $scope.$digest();
     });
   });
