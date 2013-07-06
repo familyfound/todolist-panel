@@ -38,7 +38,7 @@ function newFamily(gen, family) {
   }
 }
 
-function newPerson(gender) {
+function newPerson(gender, pid) {
   var person = copy(gender === 'male' ? man : woman)
     , families = Math.floor(Math.random() * 4) + 1
     , spouse;
@@ -47,12 +47,12 @@ function newPerson(gender) {
   person.fatherId = 'M' + randId();
   person.motherId = 'W' + randId();
   if (gender === 'male') {
-    person.id = 'M' + randId();
+    person.id = pid || ('M' + randId());
     for (var i=0; i<families; i++) {
       newFamily('W', person.familyIds);
     }
   } else {
-    person.id = 'W' + randId();
+    person.id = pid || ('W' + randId());
     for (var i=0; i<families; i++) {
       newFamily('M', person.familyIds);
     }
@@ -148,7 +148,7 @@ angular.module('test', ['todolist-panel'])
         return next(cache[personId], true);
       }
       setTimeout(function () {
-        var base = newPerson(personId[0] === 'M' ? 'male' : 'female');
+        var base = newPerson(personId[0] === 'M' ? 'male' : 'female', personId);
         cache[personId] = base;
         return next(base);
       }, 100 + Math.random() * 300);

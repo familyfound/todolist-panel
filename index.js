@@ -6,6 +6,7 @@ var angular = require('angularjs')
   , Select = require('select-popover')
   // angular directives
   , fan = require('fan')
+  , breadcrumb = require('breadcrumb')
   , tip = require('tip')
   , newTodo = require('new-todo')
   , todoList = require('todo-list')
@@ -114,14 +115,50 @@ var helpText = "<b>Inactive:</b> Research has not yet begun.<br>" +
   "<b>Clean:</b> Duplicates have been resolved and existing data has been checked for reasonableness.<br>" +
   "<b>Complete:</b> All data is found, sources have been attached, etc.";
 
-var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffapi'])
+function storeKey(pid) {
+  return 'breadcrumb.' + pid;
+}
+
+function getHistory(pid) {
+  console.log('getting for pid', pid);
+  var key = storeKey(pid);
+  if (localStorage[key]) {
+    try {
+      return JSON.parse(localStorage[key]);
+    } catch (e) {}
+  }
+  return [];
+}
+
+function setHistory(pid, history) {
+  console.log('setting for pid', pid, history.length);
+  var key = storeKey(pid);
+  localStorage[key] = JSON.stringify(history);
+}
+
+var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffapi', 'breadcrumb'])
 
   .controller('FamilyFoundCtrl', function ($scope, $attrs, $element, ffperson, ffapi) {
     $scope.personId = $attrs.personId;
-    var helpTip = new tip(helpText);
-    helpTip.attach(query('span.status-help', $element[0]));
-    helpTip.position('west');
-    helpTip.classname = 'help-tip';
+
+    // Breadcrumbs
+    $scope.bcConfig = {front:2, back: 4};
+    $scope.history = getHistory($scope.personId);
+
+    function navigate(person, direction) {
+      console.log('navigate', person.id, $scope.rootPerson.id);
+      $scope.history.push({
+        id: $scope.rootPerson.id,
+        // add in date range here?
+        name: $scope.rootPerson.display.name + ' (' + $scope.rootPerson.display.lifespan + ')',
+        direction: direction
+      });
+      setHistory(person.id, $scope.history);
+      window.location.hash = '#view=ancestor&person=' + person.id;
+      $scope.$digest();
+    }
+
+    // Status Selector
     var select = new Select(statusOptions, query('.select-status', $element[0]));
     select.on('select', function (value) {
       if ($scope.rootPerson) {
@@ -136,10 +173,19 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
       if (value === old || !old) return;
       ffapi('person/status', {status: value, id: $scope.personId});
     });
+
+    // Status Help
+    var helpTip = new tip(helpText);
+    helpTip.attach(query('span.status-help', $element[0]));
+    helpTip.position('west');
+    helpTip.classname = 'help-tip';
+
+    // Reload on hash change
     window.addEventListener('hashchange', function () {
       var params = parseArgs(location.hash.slice(1));
       if (params.person !== $scope.personId) {
         $scope.personId = params.person;
+        $scope.history = getHistory($scope.personId);
         ffperson($scope.personId, function (person) {
           $scope.todos = person.todos;
           $scope.status = person.status;
@@ -154,10 +200,8 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
         $scope.$digest();
       }
     });
-    ffperson($attrs.personId, function (person) {
-      $scope.todos = person.todos;
-      $scope.$digest();
-    });
+
+    // Fan
     $scope.fanConfig = {
       gens: 6,
       links: false,
@@ -170,17 +214,33 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
       heightChange: function (height) {
         $element.css('min-height', height + 'px');
       },
-      onNode: function (el, person) {
+      onSpouse: function (el, person) {
         el.on('click', function () {
-          window.location.hash = '#view=ancestor&person=' + person.id;
+          navigate(person, 'side');
+        });
+      },
+      onChild: function (el, person) {
+        el.on('click', function () {
+          navigate(person, 'down');
+        });
+      },
+      onParent: function (el, person) {
+        el.on('click', function () {
+          navigate(person, 'up');
         });
       }
     };
     $scope.rootPerson = false;
+
+    // Get data from server
     ffapi.relation($attrs.personId, function (person, cached) {
       $scope.rootPerson = person;
       loadPeople(ffapi.relation, person, $scope, 5, true);
       if (!cached) $scope.$digest();
+    });
+    ffperson($attrs.personId, function (person) {
+      $scope.todos = person.todos;
+      $scope.$digest();
     });
   });
 

@@ -1,4 +1,33 @@
 
+.breadcrumb-container {
+  position: absolute;
+  top: -30px;
+  left: 145px;
+  width: 535px;
+  height: 45px;
+}
+
+.breadcrumb-container .breadcrumb-help {
+  float: left;
+  margin-right: 5px;
+  margin-top: 3px;
+}
+
+.breadcrumb-container .breadcrumb {
+  padding: 0;
+  background-color: transparent;
+}
+
+.breadcrumb-container ul {
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb-container li {
+  list-style: none;
+  display: inline;
+}
+
 .help-tip .tip-inner {
   text-align: left;
   font-size: 14px;
@@ -62,6 +91,10 @@
 
 #FamilyFound .select-status:hover {
   background-color: #ddd;
+}
+
+#FamilyFoundSection {
+  position: relative;
 }
 
 #FamilyFoundSection #FamilyFound {

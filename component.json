@@ -6,7 +6,7 @@
   "keywords": [],
   "dependencies": {
     "familyfound/promise": "*",
-    "jabapyth/angularjs": "*",
+    "jaredly/angularjs": "*",
     "visionmedia/superagent": "*",
     "familyfound/ffapi": "*",
     "familyfound/ng-bootstrap": "*",
@@ -16,7 +16,8 @@
     "familyfound/todo-list": "*",
     "familyfound/fan": "*",
     "familyfound/select-popover": "*",
-    "component/query": "*"
+    "component/query": "*",
+    "familyfound/breadcrumb": "*"
   },
   "development": {
     "familyfound/domlog": "*",
