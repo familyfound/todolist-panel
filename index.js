@@ -79,7 +79,7 @@ var loadPeople = function (get, base, scope, gens, root) {
         if (!cached) scope.$digest();
       });
   }
-  if (root) {
+  if (root && base.familyIds) {
     Object.keys(base.familyIds).forEach(function (spouseId) {
       if (!base.families[spouseId]) base.families[spouseId] = [null];
       get(spouseId, function (data, cached) {
@@ -209,6 +209,7 @@ var app = angular.module('todolist-panel', ['new-todo', 'todo-list', 'fan', 'ffa
       height: 170,
       center: {x: 120, y: 120},
       ringWidth: 20,
+      radials: true,
       doubleWidth: false,
       tips: true,
       heightChange: function (height) {
