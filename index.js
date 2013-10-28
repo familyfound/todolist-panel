@@ -101,7 +101,7 @@ function titlefy(text) {
   return text[0].toUpperCase() + text.slice(1);
 }
 
-var statuses = ['inactive', 'active', 'clean', 'complete'];
+var statuses = ['inactive', 'active', 'clean', 'complete', 'hard'];
 var statusOptions = [];
 for (var i=0; i<statuses.length; i++) {
   statusOptions.push({
@@ -113,7 +113,8 @@ for (var i=0; i<statuses.length; i++) {
 var helpText = "<b>Inactive:</b> Research has not yet begun.<br>" +
   "<b>Active:</b> Research is in progress.<br>" +
   "<b>Clean:</b> Duplicates have been resolved and existing data has been checked for reasonableness.<br>" +
-  "<b>Complete:</b> All data is found, sources have been attached, etc.";
+  "<b>Complete:</b> All data is found, sources have been attached, etc.<br>" +
+  "<b>Hard:</b> I've looked at this, there's stuff to be done, but it's hard.";
 
 function storeKey(pid) {
   return 'breadcrumb.' + pid;
